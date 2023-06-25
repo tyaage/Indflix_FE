@@ -34,11 +34,10 @@
   </head>
   <body>
     @include('partials.navbar')
-    <div class="font-poppins w-full">
-      @yield('container')
-    </div>
+      <div class="font-poppins w-full">
+        @yield('container')
+      </div>
     @include('partials.footer')
-
     {{-- Flowbite Script --}}
     <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.6.5/flowbite.min.js"></script>
   </body>
