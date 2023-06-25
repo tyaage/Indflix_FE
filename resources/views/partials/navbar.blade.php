@@ -1,4 +1,4 @@
-<nav class="font-poppins w-full fixed bg-cstmdark border-gray-200 z-10">
+<nav class="font-poppins w-full fixed bg-cstmdark border-gray-200 z-10 px-10">
     <div class="flex flex-wrap justify-between items-center mx-auto p-4">
         <a href="/" class="text-4xl font-bold uppercase tracking-wide text-cstmorange">Indflix</a>
 
