@@ -29,3 +29,6 @@ Route::get('/lupasandi', function () {
 Route::get('/register', function () {
     return view('register.index');
 });
+Route::get('/lengkapiprofil', function () {
+    return view('register.lengkapiprofil');
+});
