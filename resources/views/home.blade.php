@@ -22,8 +22,8 @@
         <p class="bg-cstmdark rounded-md shadow-sm text-white text-4xl font-bold text-center py-5 mb-10">Popular on Indflix</p>
         {{-- Movie Card --}}
         <div class="flex flex-wrap justify-center gap-10">
-            <div class="object-cover">
-                <img src="/assets/img/hero-img.jpg" alt="Movie" class="rounded-md shadow-sm w-64 h-64">
+            <div class="w-64 h-74">
+                <img src="/assets/img/avatar2.jpg" alt="Movie" class="rounded-md shadow-sm w-full h-full">
             </div>
         </div>
     </div>
