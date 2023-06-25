@@ -6,7 +6,24 @@ module.exports = {
     "./resources/**/*.vue",
   ],
   theme: {
-    extend: {},
+    container: {
+      center: true,
+      // padding: '16px',
+    },
+    extend: {
+
+      colors: {
+        cstmdark: '#181818',
+        cstmlightdark: '#322f2f',
+        cstmorange: '#ffa600',
+        cstmgray: '#d9d9d9',
+        
+      },
+
+      fontFamily:{
+        pixel: ['VT323'], poppins: ['Poppins'], inter: ['Inter'],
+      },
+    },
   },
   plugins: [],
 }
