@@ -20,14 +20,14 @@
                         <input type="password" name="password" id="password" placeholder="Kata sandi" class="text-cstmdark sm:text-sm rounded-lg block w-full p-2.5" required>
                     </div>
 
-                    <a href="#" class="text-cstmorange flex justify-end hover:underline">Lupa sandi?</a>
+                    <a href="#" class="font-medium text-cstmorange flex justify-end hover:underline">Lupa sandi?</a>
 
                     <div class="w-full bg-cstmorange text-cstmdark font-bold rounded-lg text-md px-5 py-2.5 text-center">
                         <button type="submit" class="w-full">Login</button>
                     </div>
                     
                     <p class="text-medium font-light text-white text-center">
-                        Belum punya akun? <a href="#" class="font-medium text-primary-600 hover:underline text-cstm text-cstmorange">Register</a>
+                        Belum punya akun? <a href="#" class="font-medium hover:underline text-cstmorange">Register</a>
                     </p>
                 </form>
             </div>
