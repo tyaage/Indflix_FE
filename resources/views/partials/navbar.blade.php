@@ -24,25 +24,20 @@
         </form>
 
         <div class="text-white flex flex-wrap items-center">
-            <a href="#"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                    stroke-width="1.5" stroke="currentColor" class="w-8 h-8">
+            <a href="/langganan-vip" class="mr-16">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
+                    stroke="currentColor" class="w-8 h-8">
                     <path stroke-linecap="round" stroke-linejoin="round"
                         d="M15 9h3.75M15 12h3.75M15 15h3.75M4.5 19.5h15a2.25 2.25 0 002.25-2.25V6.75A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25v10.5A2.25 2.25 0 004.5 19.5zm6-10.125a1.875 1.875 0 11-3.75 0 1.875 1.875 0 013.75 0zm1.294 6.336a6.721 6.721 0 01-3.17.789 6.721 6.721 0 01-3.168-.789 3.376 3.376 0 016.338 0z" />
                 </svg>
             </a>
 
-            <ul class="navbar-nav ml-auto">
+            <ul class="navbar-nav ml-auto relative z-20">
                 @auth
                     <li class="relative group">
                         <a class="nav-link dropdown-toggle flex justify-between items-center font-semibold -ml-14 px-4 lg:px-5 py-2 lg:py-2.5"
-                            role="button" aria-haspopup="true" id="dropdownMenuButton">
+                            role="button" aria-haspopup="true">
                             Welcome back, <span class="ml-1 text-cstmorange">{{ auth()->user()->name }}</span>
-                            <form method="POST" action="/logout">
-                                @csrf
-                                <button type="submit">
-                                    Logout
-                                </button>
-                            </form>
                             {{-- Drop Arrow Icon --}}
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
                                 class="w-4 h-4 ml-1">
@@ -51,18 +46,19 @@
                                     clip-rule="evenodd" />
                             </svg>
                         </a>
-                        <ul class="absolute z-10 hidden mt-1 bg-white shadow-md rounded-sm py-2"
-                            aria-labelledby="dropdownMenuButton">
+                        <ul class="absolute z-30 hidden mt-1 bg-white shadow-md rounded-sm py-2">
                             <li>
-                                <a href="/account"
-                                    class="dropdown-item flex items-center font-semibold text-sm tracking-wide px-4 py-2 text-dark hover:text-cstmteal transition-colors duration-300">
+                                <a href="/akun"
+                                    class="dropdown-item flex items-center font-semibold text-sm tracking-wide px-4 py-2 text-black hover:text-cstmteal transition-colors duration-300">
                                     {{-- Account Icon --}}
                                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
                                         class="w-4 h-4 mr-1">
                                         <path
                                             d="M10 8a3 3 0 100-6 3 3 0 000 6zM3.465 14.493a1.23 1.23 0 00.41 1.412A9.957 9.957 0 0010 18c2.31 0 4.438-.784 6.131-2.1.43-.333.604-.903.408-1.41a7.002 7.002 0 00-13.074.003z" />
-                                    </svg> Account</a>
+                                    </svg> Account
+                                </a>
                             </li>
+
                             <li>
                                 <hr class="dropdown-divider">
                             </li>

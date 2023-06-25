@@ -1,53 +1,21 @@
-<style>
-    .container {
-        max-width: 400px;
-        margin: 0 auto;
-    }
+@extends('layouts.main')
 
-    .form-group {
-        margin-bottom: 20px;
-    }
-
-    .form-group label {
-        display: block;
-        margin-bottom: 5px;
-    }
-
-    .form-group input[type="text"] {
-        width: 100%;
-        padding: 5px;
-    }
-
-    .form-group .error {
-        color: red;
-        font-size: 12px;
-    }
-
-    .btn {
-        padding: 10px 20px;
-        background-color: #3490dc;
-        color: #fff;
-        border: none;
-        cursor: pointer;
-    }
-
-    .btn:hover {
-        background-color: #2779bd;
-    }
-</style>
-
-<div class="container">
-    <h1>Create Genre</h1>
-    <a href="{{ route('genre.index') }}"><button class="btn">Back</button></a>
-    <form action="{{ route('genre.store') }}" method="POST">
-        @csrf
-        <div class="form-group">
-            <label for="name">Name:</label>
-            <input type="text" name="name" required>
-            @error('name')
-                <div class="error">{{ $message }}</div>
-            @enderror
-        </div>
-        <button type="submit" class="btn">Create</button>
-    </form>
-</div>
+@section('container')
+    <div class="container mx-auto max-w-md p-4 bg-white rounded shadow-lg">
+        <h1 class="text-2xl font-bold mb-20">Create Genre</h1>
+        <a href="{{ route('genre.index') }}" class="mb-4 inline-block">
+            <button class="py-2 px-4 bg-blue-500 text-white rounded hover:bg-blue-600">Back</button>
+        </a>
+        <form action="{{ route('genre.store') }}" method="POST" class="mt-6">
+            @csrf
+            <div class="mb-4">
+                <label for="name" class="block mb-2 text-gray-800">Name:</label>
+                <input type="text" name="name" required class="w-full py-2 px-4 border border-gray-300 rounded">
+                @error('name')
+                    <div class="text-red-500 text-xs mt-1">{{ $message }}</div>
+                @enderror
+            </div>
+            <button type="submit" class="py-2 px-4 bg-blue-500 text-white rounded hover:bg-blue-600">Create</button>
+        </form>
+    </div>
+@endsection

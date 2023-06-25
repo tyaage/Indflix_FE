@@ -82,6 +82,15 @@
 </body>
 {{-- Flowbite Script --}}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.6.5/flowbite.min.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const dropdownToggle = document.querySelector('.dropdown-toggle');
+        dropdownToggle.addEventListener('click', function() {
+            const dropdownMenu = dropdownToggle.nextElementSibling;
+            dropdownMenu.classList.toggle('hidden');
+        });
+    });
+</script>
 @yield('js')
 
 </html>
