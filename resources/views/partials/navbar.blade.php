@@ -1,5 +1,5 @@
-<nav class="font-poppins w-full fixed bg-cstmdark border-gray-200">
-    <div class="max-w-screen-xl flex flex-wrap justify-between items-center mx-auto p-4">
+<nav class="font-poppins w-full fixed bg-cstmdark border-gray-200 z-10">
+    <div class="flex flex-wrap justify-between items-center mx-auto p-4">
         <a href="/" class="text-4xl font-bold uppercase tracking-wide text-cstmorange">Indflix</a>
 
         <form class="w-1/2">   
