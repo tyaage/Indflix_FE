@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Genre;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Http\Requests\StoreGenreRequest;
 use App\Http\Requests\UpdateGenreRequest;
@@ -34,7 +35,7 @@ class GenreController extends Controller
         $validatedData = $request->validate([
             'name' => 'required|unique:genre,name'
         ]);
-
+        $validatedData['slug'] = Str::slug($validatedData['name']);
         Genre::create($validatedData);
 
         return redirect()->route('genre.index')->with('success', 'Genre created successfully.');
@@ -64,6 +65,8 @@ class GenreController extends Controller
         $validatedData = $request->validate([
             'name' => 'required|unique:genre,name,' . $genre->id
         ]);
+        // Update slug based on name
+        $validatedData['slug'] = Str::slug($validatedData['name']);
 
         $genre->update($validatedData);
 

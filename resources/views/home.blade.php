@@ -38,4 +38,18 @@
             @endforeach
         </div>
     </div>
+    {{-- Movies --}}
+    <div class="p-10 ">
+        <p class="bg-cstmdark rounded-md shadow-sm text-white text-4xl font-bold text-center py-5 mb-10">Newest on Indflix
+        </p>
+        {{-- Movie Card --}}
+        <div class="flex flex-wrap justify-center gap-10">
+            @foreach ($newestMovies as $movie)
+                <div class="w-64 h-74">
+                    <a href="/{{ $movie->slug }}"><img src="{{ asset($movie->image) }}" alt="Movie"
+                            class="rounded-md shadow-sm w-full h-full"></a>
+                </div>
+            @endforeach
+        </div>
+    </div>
 @endsection
