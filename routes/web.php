@@ -1,6 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AuthController;
+use App\Http\Controllers\HomeController;
 
 /*
 |--------------------------------------------------------------------------
@@ -13,21 +15,24 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('home');
+Route::middleware('token')->group(function () {
+
+});
+Route::get('/', [HomeController::class, 'getData']);
+Route::controller(AuthController::class)->group(function () {
+    Route::get('/login', 'indexLogin');
+    Route::post('/login', 'login');
+    Route::get('/register', 'indexRegister');
+    Route::post('/register', 'register');
 });
 
-// Bagian Login
-Route::get('/login', function () {
-    return view('login.index');
-});
+// Route::get('/login', function () {
+//     return view('login.index');
+// });
+
+
 Route::get('/lupasandi', function () {
     return view('login.lupasandi');
-});
-
-// Bagian Register
-Route::get('/register', function () {
-    return view('register.index');
 });
 Route::get('/lengkapiprofil', function () {
     return view('register.lengkapiprofil');

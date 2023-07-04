@@ -3,42 +3,20 @@
         <a href="/" class="text-4xl font-bold uppercase tracking-wide text-cstmorange">Indflix</a>
 
         <form class="w-1/2">
-            <label for="default-search"
-                class="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white">Search</label>
-            <div class="relative">
-                <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
-                    <svg aria-hidden="true" class="w-5 h-5 text-gray-500 dark:text-gray-400" fill="none"
-                        stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
-                    </svg>
-                </div>
-                <input type="search" id="default-search"
-                    class="block w-full p-4 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500"
-                    placeholder="Search Movies..." required>
-                <div
-                    class="bg-cstmorange text-cstmdark absolute right-2.5 bottom-2.5 font-bold rounded-lg text-sm px-4 py-2">
-                    <button type="submit">Search</button>
-                </div>
-            </div>
+            <!-- Form pencarian -->
         </form>
+
         <div class="text-white flex flex-wrap items-center">
+            <a href="#">
+                <!-- Icon notifikasi -->
+            </a>
 
             <ul class="navbar-nav ml-auto">
                 @auth
                     <li class="relative group">
-                        <a href="/langganan-vip" class="mr-16">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5"
-                                stroke="currentColor" class="w-8 h-8">
-                                <path stroke-linecap="round" stroke-linejoin="round"
-                                    d="M15 9h3.75M15 12h3.75M15 15h3.75M4.5 19.5h15a2.25 2.25 0 002.25-2.25V6.75A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25v10.5A2.25 2.25 0 004.5 19.5zm6-10.125a1.875 1.875 0 11-3.75 0 1.875 1.875 0 013.75 0zm1.294 6.336a6.721 6.721 0 01-3.17.789 6.721 6.721 0 01-3.168-.789 3.376 3.376 0 016.338 0z" />
-                            </svg>
-                        </a>
                         <a class="nav-link dropdown-toggle flex justify-between items-center font-semibold -ml-14 px-4 lg:px-5 py-2 lg:py-2.5"
                             role="button" aria-haspopup="true">
-                            {{-- Nama --}}
-                            <span id="user-name" class="ml-1 text-cstmorange">Welcome back,
-                                {{ auth()->user()->name }}</span>
+                            Welcome back, <span class="ml-1 text-cstmorange">{{ auth()->user()->name }}</span>
                             {{-- Drop Arrow Icon --}}
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
                                 class="w-4 h-4 ml-1">
@@ -64,7 +42,7 @@
                                 <hr class="dropdown-divider">
                             </li>
                             <li>
-                                <a href="#" onclick="logoutUser()">
+                                <form action="/logout" method="post">
                                     @csrf
                                     <button type="submit"
                                         class="dropdown-item flex items-center font-semibold text-sm tracking-wide px-4 py-2 text-cstmdark hover:text-cstmcrimson transition-colors duration-300">
@@ -78,7 +56,7 @@
                                                 d="M19 10a.75.75 0 00-.75-.75H8.704l1.048-.943a.75.75 0 10-1.004-1.114l-2.5 2.25a.75.75 0 000 1.114l2.5 2.25a.75.75 0 101.004-1.114l-1.048-.943h9.546A.75.75 0 0019 10z"
                                                 clip-rule="evenodd" />
                                         </svg>Log out</button>
-                                </a>
+                                </form>
                             </li>
                         </ul>
                     </li>
