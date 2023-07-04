@@ -9,6 +9,7 @@ class HomeController extends Controller
 {
     public function getData(Request $request)
     {
+
         $response = Http::get('http://localhost:8000/api/');
 
         if ($response->successful()) {

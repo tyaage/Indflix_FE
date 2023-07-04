@@ -1,4 +1,3 @@
-{{-- @dd($user); --}}
 @extends('layouts.main')
 @section('container')
     {{-- Hero Image --}}
