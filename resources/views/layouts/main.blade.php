@@ -33,64 +33,49 @@
             z-index: 1000;
         }
     </style>
-    <style>
-        .banner-container {
-            width: 100%;
-            height: 300px;
-            /* Sesuaikan tinggi banner */
-            overflow: hidden;
-            position: relative;
-        }
-
-        .banner-slide {
-            width: 100%;
-            height: 100%;
-            opacity: 0;
-            transition: opacity 0.5s ease-in-out;
-            position: absolute;
-            top: 0;
-            left: 0;
-        }
-
-        .banner-slide.active {
-            opacity: 1;
-        }
-
-        .banner-image {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        .banner-caption {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            padding: 10px;
-            background-color: rgba(0, 0, 0, 0.5);
-            color: #fff;
-        }
-    </style>
 </head>
 
 <body>
+    @php
+        if (Session::has('user') && Session::has('token')) {
+            $user = Session::get('user');
+            $is_admin = $user['is_admin'];
+        } else {
+            // Penanganan jika data pengguna tidak tersedia
+        }
+    @endphp
     @include('partials.navbar')
     <div class="font-poppins w-full">
         @yield('container')
     </div>
     @include('partials.footer')
-</body>
-{{-- Flowbite Script --}}
-<script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.6.5/flowbite.min.js"></script>
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const dropdownToggle = document.querySelector('.dropdown-toggle');
-        dropdownToggle.addEventListener('click', function() {
-            const dropdownMenu = dropdownToggle.nextElementSibling;
-            dropdownMenu.classList.toggle('hidden');
+    {{-- Flowbite Script --}}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.6.5/flowbite.min.js"></script>
+    {{-- Dropdown --}}
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const dropdownToggle = document.querySelector('.dropdown-toggle');
+            dropdownToggle.addEventListener('click', function() {
+                const dropdownMenu = dropdownToggle.nextElementSibling;
+                dropdownMenu.classList.toggle('hidden');
+            });
         });
-    });
-</script>
-@yield('js')
+    </script>
+    {{-- Logout --}}
+    <script>
+        function logoutUser() {
+            // Hapus token dari localStorage
+            localStorage.removeItem('token');
+
+            // Hapus data pengguna dari localStorage
+            localStorage.removeItem('user');
+
+            // Redirect ke halaman login atau halaman awal
+            window.location.href = '/'; // Ganti '/login' dengan halaman tujuan setelah logout
+        }
+    </script>
+
+    @yield('js')
+</body>
 
 </html>

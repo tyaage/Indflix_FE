@@ -1,5 +1,4 @@
 @extends('layouts.main')
-
 @section('container')
     <div class="min-h-screen flex items-center justify-center bg-gray-100">
         <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -19,15 +18,6 @@
                     </svg>
                     <a href="/admin/genre" class="text-blue-500 hover:underline">Genre</a>
                 </div>
-                <div class="flex items-center">
-                    <a href="{{ route('admin.pengaturan') }}" class="text-blue-500 hover:underline">Pengaturan</a>
-                </div>
-                <form method="POST" action="/logout" class="mt-8">
-                    @csrf
-                    <button type="submit" class="px-6 py-3 bg-red-500 text-white rounded-md hover:bg-red-700">
-                        Logout
-                    </button>
-                </form>
             </div>
         </div>
     </div>

@@ -5,61 +5,71 @@ namespace App\Http\Controllers;
 use App\Models\Genre;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
-use App\Http\Requests\StoreGenreRequest;
-use App\Http\Requests\UpdateGenreRequest;
+use Illuminate\Support\Facades\Http;
 
 class GenreController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        $genres = Genre::all();
-        return view('admin.genre.index', compact('genres'));
+        $accessToken = session('access_token');
+        $response = Http::withHeaders([
+            'Authorization' => 'Bearer ' . $accessToken // Menambahkan token ke header permintaan
+        ])->get('http://localhost:8000/api/genre');
+
+        if ($response->successful()) {
+            $genres = $response->json();
+
+            return view('admin.genre.index', compact('genres'));
+        } else {
+            abort(500, 'Failed to retrieve data from API');
+        }
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
     public function create()
     {
         return view('admin.genre.create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(Request $request)
     {
-        $validatedData = $request->validate([
-            'name' => 'required|unique:genre,name'
+        $accessToken = session('access_token');
+        $csrfToken = csrf_token();
+
+        $response = Http::withHeaders([
+            'Authorization' => 'Bearer ' . $accessToken,
+            'X-CSRF-TOKEN' => $csrfToken,
+        ])->post('http://localhost:8000/api/genre', [
+            'name' => $request->input('name')
         ]);
-        $validatedData['slug'] = Str::slug($validatedData['name']);
-        Genre::create($validatedData);
 
-        return redirect()->route('genre.index')->with('success', 'Genre created successfully.');
+        if ($response->successful()) {
+            // Sukses
+            $responseData = $response->json();
+            // dd($responseData);
+            return redirect()->route('genre.index')->with('success', $responseData['message']);
+        } else {
+            // Error
+            $errorResponse = $response->json();
+            return redirect()->back()->with('error', $errorResponse['message'])->withInput($errorResponse['oldInput']);
+        }
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Genre $genre)
+    public function edit($id)
     {
-        //
+        $accessToken = session('access_token');
+        $response = Http::withHeaders([
+            'Authorization' => 'Bearer ' . $accessToken,
+        ])->get('http://localhost:8000/api/genre/'.$id.'/edit');
+
+        if ($response->successful()) {
+            $genre = $response->json();
+
+            return view('admin.genre.edit', compact('genre'));
+        } else {
+            abort(500, 'Failed to retrieve data from API');
+        }
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Genre $genre)
-    {
-        return view('admin.genre.edit', compact('genre'));
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, Genre $genre)
     {
         $validatedData = $request->validate([
@@ -73,9 +83,6 @@ class GenreController extends Controller
         return redirect()->route('genre.index')->with('success', 'Genre updated successfully.');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
     public function destroy(Genre $genre)
     {
         $genre->delete();

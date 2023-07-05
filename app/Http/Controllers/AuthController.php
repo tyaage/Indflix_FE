@@ -2,141 +2,140 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\User;
+use GuzzleHttp\Client;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Hash;
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Validation\ValidationException;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Session;
 
 class AuthController extends Controller
 {
-    public function index()
-    {
+    public function indexLogin() {
         return view('login.index');
     }
 
-    public function login(Request $request)
-    {
-        $credentials = $request->validate([
-            'email' => 'required|email',
-            'password' => 'required'
+    public function login(Request $request) {
+        $response = Http::withToken(csrf_token())->post('http://localhost:8000/api/login', [
+            'email' => $request->input('email'),
+            'password' => $request->input('password')
         ]);
 
-        if (Auth::attempt($credentials)) {
-            $user = Auth::user();
+        if ($response->successful()) {
+            // Sukses
+            $responseData = $response->json();
+            session(['access_token' => $responseData['token']]);
+            session(['user' => $responseData['user']]);
 
-            if ($user->is_admin) {
-                return redirect()->route('admin.dashboard'); // Mengarahkan admin ke dashboard admin
+             // Cek jika user adalah admin
+            if ($responseData['user']['is_admin']) {
+                return redirect('/admin')->with('success', $responseData['message']);
             } else {
-                return redirect()->route('home'); // Mengarahkan user biasa ke dashboard user
+                return redirect('/')->with('success', $responseData['message']);
             }
         } else {
-            return redirect()->back()->withInput()->withErrors(['message' => 'Username atau Password salah!']); // Mengarahkan kembali ke halaman login dengan pesan error
+            // Error
+            $errorResponse = $response->json();
+            return redirect()->back()->with('error', $errorResponse['message'])->withInput($errorResponse['oldInput']);
         }
     }
 
-    public function logout(Request $request)
-    {
-        Auth::logout();
-
-        $request->session()->invalidate();
-
-        $request->session()->regenerateToken();
-
-        return redirect('/');
-    }
-
-    public function indexRegister()
-    {
-        return view('auth.register');
+    public function indexRegister() {
+        return view('register.index');
     }
 
     public function register(Request $request)
     {
-        $validator = Validator::make($request->all(), [
-            'name' => 'required',
-            'email' => 'required|email|unique:users',
-            'password' => 'required|min:6|confirmed',
-            'gender' => 'required|in:L,P',
-            'birth_year' => 'required|date_format:Y',
+        $response = Http::withToken(csrf_token())->post('http://localhost:8000/api/register', [
+            'name' => $request->input('name'),
+            'email' => $request->input('email'),
+            'password' => $request->input('password'),
+            'password_confirmation' => $request->input('password_confirmation'),
+            'gender' => $request->input('gender'),
+            'birth_year' => $request->input('birth_year')
         ]);
 
-        if ($validator->fails()) {
-            return response()->json(['errors' => $validator->errors()], 422);
+        if ($response->successful()) {
+            // Sukses
+            $responseData = $response->json();
+            return redirect('/login')->with('success', $responseData['message']);
+        } else {
+            // Error
+            $errorResponse = $response->json();
+            return redirect()->back()->with('error', $errorResponse['message'])->withInput($errorResponse['oldInput']);
         }
+    }
 
-        // Buat user baru
-        $validatedData = $validator->validated();
-        $validatedData['password'] = Hash::make($request->password);
-        $user = User::create($validatedData);
+    public function logout()
+    {
+        $response = Http::withHeaders([
+            'Authorization' => 'Bearer ' . session('access_token')
+        ])->post('http://localhost:8000/api/logout');
 
-        return redirect('/login');
-
-        // Postman
-        // return response()->json(['message' => 'Registration successful', 'user' => $user], 201);
+        if ($response->successful()) {
+            // Logout berhasil
+            session()->forget('access_token');
+            session()->forget('user');
+            return redirect('/')->with('success', 'Logout berhasil');
+        } else {
+            // Gagal logout
+            return redirect('/')->with('error', 'Gagal logout');
+        }
     }
 
     public function pengaturan() {
-        $user = Auth::user();
-        return view('pengaturan', compact('user'));
+        return view('pengaturan');
     }
 
-    public function pengaturanAdmin() {
-        $user = Auth::user();
-        return view('admin.pengaturan', compact('user'));
-    }
+    public function ubahPassword(Request $request) {
+        $accessToken = session('access_token');
+        $csrfToken = csrf_token();
 
-    public function ubahPassword(Request $request)
-    {
-        // $user = $request->user();
-        $user = Auth::user();
-
-        // Validasi data yang dikirimkan oleh pengguna
-        $this->validate($request, [
-            'current_password' => 'required',
-            'new_password' => 'required|string|min:6|confirmed',
-        ], [
-            'new_password.confirmed' => 'Konfirmasi password baru tidak sesuai.',
+        $response = Http::withHeaders([
+            'Authorization' => 'Bearer ' . $accessToken,
+            'X-CSRF-TOKEN' => $csrfToken,
+        ])->post('http://localhost:8000/api/ubah-password', [
+            'current_password' => $request->input('current_password'),
+            'new_password' => $request->input('new_password'),
+            'new_password_confirmation' => $request->input('new_password_confirmation')
         ]);
 
-        // Memeriksa apakah password saat ini sesuai dengan yang ada di database
-        if (!Hash::check($request->current_password, $user->password)) {
-            throw ValidationException::withMessages([
-                'current_password' => ['Password Salah.'],
-            ]);
+        if ($response->successful()) {
+            // Sukses
+            $responseData = $response->json();
+            return redirect()->back()->with('password-success', $responseData['message']);
+        } else {
+            // Error
+            $errorResponse = $response->json();
+            return redirect()->back()->with('error', $errorResponse['message'])->withInput($errorResponse['oldInput']);
         }
-
-        // Mengganti password sesuai dengan peran (role) yang sedang login
-        if ($user->is_admin == true) {
-            $user->password = Hash::make($request->new_password);
-            $user->save();
-        } elseif ($user->is_admin == false) {
-            $user->password = Hash::make($request->new_password);
-            $user->save();
-        }
-
-        return back()->with('password-success', 'Password telah berhasil diubah!');
     }
 
-    // Mengubah data profil pengguna
-    public function ubahProfile(Request $request)
-    {
-        $request->validate([
-            'name' => 'required|string',
-            'email' => 'required|email|unique:users,email,' . Auth::id(),
-            'gender' => 'required|in:L,P',
-            'birth_year' => 'required|integer|min:1900|max:' . date('Y'),
+    public function ubahProfile(Request $request) {
+        $accessToken = session('access_token');
+        $csrfToken = csrf_token();
+
+        $response = Http::withHeaders([
+            'Authorization' => 'Bearer ' . $accessToken,
+            'X-CSRF-TOKEN' => $csrfToken,
+        ])->post('http://localhost:8000/api/ubah-profile', [
+            'name' => $request->input('name'),
+            'email' => $request->input('email'),
+            'gender' => $request->input('gender'),
+            'birth_year' => $request->input('birth_year')
         ]);
 
-        $user = Auth::user();
-        $user->name = $request->name;
-        $user->email = $request->email;
-        $user->gender = $request->gender;
-        $user->birth_year = $request->birth_year;
-        $user->save();
+        if ($response->successful()) {
+            // Sukses
+            $responseData = $response->json();
 
-        return redirect()->back()->with('profile-success', 'Profile has been updated successfully.');
+            // Perbarui session data pengguna
+            session(['user' => $responseData['user']]);
+
+            return redirect()->back()->with('profile-success', $responseData['message']);
+        } else {
+            // Error
+            $errorResponse = $response->json();
+            return redirect()->back()->with('error', $errorResponse['errors'])->withInput($errorResponse['oldInput']);
+        }
     }
-
 }

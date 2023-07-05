@@ -19,24 +19,25 @@
         @if (session('error'))
             <div class="bg-red-200 text-red-800 py-2 px-4 mb-4">{{ session('error') }}</div>
         @endif
-        @if ($genres->count() > 0)
-            <table class="w-full border-collapse">
-                <thead>
-                    <tr>
-                        <th class="bg-gray-200 border border-gray-300 py-2 px-4">No.</th>
-                        <th class="bg-gray-200 border border-gray-300 py-2 px-4">Name</th>
-                        <th class="bg-gray-200 border border-gray-300 py-2 px-4">Action</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach ($genres as $genre)
+
+        <table class="w-full border-collapse">
+            <thead>
+                <tr>
+                    <th class="bg-gray-200 border border-gray-300 py-2 px-4">No.</th>
+                    <th class="bg-gray-200 border border-gray-300 py-2 px-4">Name</th>
+                    <th class="bg-gray-200 border border-gray-300 py-2 px-4">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach ($genres as $genre)
+                    @foreach ($genre as $gen)
                         <tr>
                             <td class="border border-gray-300 py-2 px-4">{{ $loop->iteration }}</td>
-                            <td class="border border-gray-300 py-2 px-4">{{ $genre->name }}</td>
+                            <td class="border border-gray-300 py-2 px-4">{{ $gen['name'] }}</td>
                             <td class="border border-gray-300 py-2 px-4">
-                                <a href="{{ route('genre.edit', $genre->id) }}"
+                                <a href="{{ route('genre.edit', $gen['id']) }}"
                                     class="text-blue-500 hover:text-blue-700 mr-2">Edit</a>
-                                <form action="{{ route('genre.destroy', $genre->id) }}" method="POST" class="inline">
+                                <form action="{{ route('genre.destroy', $gen['id']) }}" method="POST" class="inline">
                                     @csrf
                                     @method('DELETE')
                                     <button type="submit"
@@ -46,10 +47,8 @@
                             </td>
                         </tr>
                     @endforeach
-                </tbody>
-            </table>
-        @else
-            <p>No genres found.</p>
-        @endif
+                @endforeach
+            </tbody>
+        </table>
     </div>
 @endsection

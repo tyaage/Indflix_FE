@@ -10,10 +10,11 @@
             @csrf
             <div class="mb-4">
                 <label for="name" class="block mb-2 text-gray-800">Name:</label>
-                <input type="text" name="name" required class="w-full py-2 px-4 border border-gray-300 rounded">
-                @error('name')
-                    <div class="text-red-500 text-xs mt-1">{{ $message }}</div>
-                @enderror
+                <input type="text" name="name" class="w-full py-2 px-4 border border-gray-300 rounded"
+                    value="{{ old('name') }}">
+                @if (session()->has('error'))
+                    <p class="text-red-500">{{ session('error.name.0') }}</p>
+                @endif
             </div>
             <button type="submit" class="py-2 px-4 bg-blue-500 text-white rounded hover:bg-blue-600">Create</button>
         </form>

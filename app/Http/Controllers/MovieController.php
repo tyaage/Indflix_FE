@@ -2,13 +2,12 @@
 
 namespace App\Http\Controllers;
 
-use Carbon\Carbon;
 use App\Models\Genre;
 use App\Models\Movie;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
-use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Storage;
 
 class MovieController extends Controller
@@ -18,9 +17,6 @@ class MovieController extends Controller
      */
     public function index()
     {
-        // $movies = Movie::all();
-
-        // return view('admin.movie.index', compact('movies'));
         $movies = Movie::with('genre')->get();
 
         return view('admin.movie.index', compact('movies'));
@@ -38,35 +34,34 @@ class MovieController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request): RedirectResponse
-{
-    $validatedData = $request->validate([
-        'name' => 'required',
-        'actor' => 'required',
-        'synopsis' => 'required',
-        'writer' => 'required',
-        'year' => 'required|integer',
-        'image' => 'nullable|image|max:2048',
-        'genres' => 'required|array',
-        'genres.*' => 'exists:genre,id',
-        'minimum_age' => 'required|integer',
-        'video' => 'required|url',
-    ]);
+    public function store(Request $request)
+    {
+        $validatedData = $request->validate([
+            'name' => 'required',
+            'actor' => 'required',
+            'synopsis' => 'required',
+            'writer' => 'required',
+            'year' => 'required|integer',
+            'image' => 'nullable|image|max:2048',
+            'genres' => 'required|array',
+            'genres.*' => 'exists:genre,id',
+            'minimum_age' => 'required|integer',
+            'video' => 'required|url',
+        ]);
 
-    $validatedData['slug'] = Str::slug($validatedData['name']);
+        $validatedData['slug'] = Str::slug($validatedData['name']);
 
-    if ($request->hasFile('image')) {
-        $imagePath = $request->file('image')->store('public/images');
-        $validatedData['image'] = Storage::url($imagePath);
+        if ($request->hasFile('image')) {
+            $imagePath = $request->file('image')->store('public/images');
+            $validatedData['image'] = Storage::url($imagePath);
+        }
+
+        $movie = Movie::create($validatedData);
+
+        $movie->genre()->attach($validatedData['genres']);
+
+        return redirect()->route('movie.index')->with('success', 'Movie created successfully.');
     }
-
-    $movie = Movie::create($validatedData);
-
-    $movie->genre()->attach($validatedData['genres']);
-
-    return redirect()->route('movie.index')->with('success', 'Movie created successfully.');
-}
-
 
     /**
      * Show the form for editing the specified resource.
@@ -138,16 +133,12 @@ class MovieController extends Controller
 
     }
 
-    /**
-     * Display the specified resource.
-     */
     public function show($movie)
     {
         $movie = Movie::where('slug', $movie)->firstOrFail();
 
          // Ambil informasi pengguna (misalnya dari sesi atau autentikasi)
-        $user = Auth::user();
-        $userBirthYear = $user->birth_year;
+        $userBirthYear = session('user')['birth_year'];
         $userAge = date('Y') - $userBirthYear;
 
         $minimum_age = $movie->minimum_age;

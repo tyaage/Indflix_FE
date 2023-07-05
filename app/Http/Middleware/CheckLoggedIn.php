@@ -6,7 +6,7 @@ use Closure;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-class isAdmin
+class CheckLoggedIn
 {
     /**
      * Handle an incoming request.
@@ -15,11 +15,10 @@ class isAdmin
      */
     public function handle(Request $request, Closure $next): Response
     {
-        $role = session('user')['is_admin'];
+        $token = session('access_token');
 
-        if (!$role) {
-            abort(403, 'Unauthorized');
-            return redirect('/');
+        if (!$token) {
+            return redirect('/login');
         }
 
         return $next($request);

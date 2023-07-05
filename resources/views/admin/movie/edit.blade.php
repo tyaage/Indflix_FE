@@ -59,20 +59,21 @@
             class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">Update</button>
     </form>
 @endsection
+@section('js')
+    <script>
+        // Script to handle delete image button
+        const deleteImageButton = document.querySelector('.bg-red-500');
+        deleteImageButton.addEventListener('click', function() {
+            const currentImageContainer = document.querySelector('.flex');
+            currentImageContainer.remove();
 
-<script>
-    // Script to handle delete image button
-    const deleteImageButton = document.querySelector('.bg-red-500');
-    deleteImageButton.addEventListener('click', function() {
-        const currentImageContainer = document.querySelector('.flex');
-        currentImageContainer.remove();
-
-        // Set input value to trigger image deletion on the server
-        const deleteImageInput = document.createElement('input');
-        deleteImageInput.type = 'hidden';
-        deleteImageInput.name = 'delete_image';
-        deleteImageInput.value = '1';
-        const form = document.querySelector('form');
-        form.appendChild(deleteImageInput);
-    });
-</script>
+            // Set input value to trigger image deletion on the server
+            const deleteImageInput = document.createElement('input');
+            deleteImageInput.type = 'hidden';
+            deleteImageInput.name = 'delete_image';
+            deleteImageInput.value = '1';
+            const form = document.querySelector('form');
+            form.appendChild(deleteImageInput);
+        });
+    </script>
+@endsection
