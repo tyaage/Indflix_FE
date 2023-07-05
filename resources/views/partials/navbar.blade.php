@@ -27,7 +27,7 @@
             <ul class="navbar-nav ml-auto">
                 @if (session('user'))
                     <li class="relative group">
-                        <a href="/langganan-vip" class="mr-16">
+                        <a href="/langganan-vip">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                 stroke-width="1.5" stroke="currentColor" class="w-8 h-8">
                                 <path stroke-linecap="round" stroke-linejoin="round"

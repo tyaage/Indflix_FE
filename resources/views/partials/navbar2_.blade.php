@@ -12,11 +12,11 @@
             </a>
 
             <ul class="navbar-nav ml-auto">
-                @auth
+                @if (session('user'))
                     <li class="relative group">
                         <a class="nav-link dropdown-toggle flex justify-between items-center font-semibold -ml-14 px-4 lg:px-5 py-2 lg:py-2.5"
                             role="button" aria-haspopup="true">
-                            Welcome back, <span class="ml-1 text-cstmorange">{{ auth()->user()->name }}</span>
+                            Welcome back, <span class="ml-1 text-cstmorange">{{ session('user')['name'] }}</span>
                             {{-- Drop Arrow Icon --}}
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
                                 class="w-4 h-4 ml-1">
@@ -75,7 +75,7 @@
                         </svg>
                     </li>
                 @endauth
-            </ul>
-        </div>
+        </ul>
     </div>
+</div>
 </nav>

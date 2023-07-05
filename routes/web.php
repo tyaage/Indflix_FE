@@ -23,13 +23,14 @@ Route::controller(AuthController::class)->group(function () {
     Route::get('/login', 'indexLogin');
     Route::post('/login', 'login');
     Route::post('/logout', 'logout');
+
     Route::get('/register', 'indexRegister');
     Route::post('/register', 'register');
-});
 
-// Route::get('/login', function () {
-//     return view('login.index');
-// });
+    Route::get('/akun', 'pengaturan');
+    Route::post('/ubah-password', 'ubahPassword');
+    Route::post('/ubah-profile', 'ubahProfile');
+});
 
 
 Route::get('/lupasandi', function () {

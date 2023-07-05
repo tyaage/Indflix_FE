@@ -25,7 +25,13 @@ class AuthController extends Controller
             $responseData = $response->json();
             session(['access_token' => $responseData['token']]);
             session(['user' => $responseData['user']]);
-            return redirect('/')->with('success', $responseData['message']);
+
+             // Cek jika user adalah admin
+            if ($responseData['user']['is_admin']) {
+                return redirect('/admin')->with('success', $responseData['message']);
+            } else {
+                return redirect('/')->with('success', $responseData['message']);
+            }
         } else {
             // Error
             $errorResponse = $response->json();
@@ -73,6 +79,63 @@ class AuthController extends Controller
         } else {
             // Gagal logout
             return redirect('/')->with('error', 'Gagal logout');
+        }
+    }
+
+    public function pengaturan() {
+        return view('pengaturan');
+    }
+
+    public function ubahPassword(Request $request) {
+        $accessToken = session('access_token');
+        $csrfToken = csrf_token();
+
+        $response = Http::withHeaders([
+            'Authorization' => 'Bearer ' . $accessToken,
+            'X-CSRF-TOKEN' => $csrfToken,
+        ])->post('http://localhost:8000/api/ubah-password', [
+            'current_password' => $request->input('current_password'),
+            'new_password' => $request->input('new_password'),
+            'new_password_confirmation' => $request->input('new_password_confirmation')
+        ]);
+
+        if ($response->successful()) {
+            // Sukses
+            $responseData = $response->json();
+            return redirect()->back()->with('password-success', $responseData['message']);
+        } else {
+            // Error
+            $errorResponse = $response->json();
+            return redirect()->back()->with('error', $errorResponse['message'])->withInput($errorResponse['oldInput']);
+        }
+    }
+
+    public function ubahProfile(Request $request) {
+        $accessToken = session('access_token');
+        $csrfToken = csrf_token();
+
+        $response = Http::withHeaders([
+            'Authorization' => 'Bearer ' . $accessToken,
+            'X-CSRF-TOKEN' => $csrfToken,
+        ])->post('http://localhost:8000/api/ubah-profile', [
+            'name' => $request->input('name'),
+            'email' => $request->input('email'),
+            'gender' => $request->input('gender'),
+            'birth_year' => $request->input('birth_year')
+        ]);
+
+        if ($response->successful()) {
+            // Sukses
+            $responseData = $response->json();
+
+            // Perbarui session data pengguna
+            session(['user' => $responseData['user']]);
+
+            return redirect()->back()->with('profile-success', $responseData['message']);
+        } else {
+            // Error
+            $errorResponse = $response->json();
+            return redirect()->back()->with('error', $errorResponse['errors'])->withInput($errorResponse['oldInput']);
         }
     }
 }
