@@ -49,3 +49,30 @@
         </div>
     </div>
 @endsection
+@section('js')
+    <script>
+        // Mengambil semua elemen dengan kelas "group"
+        const dropdowns = document.querySelectorAll('.group');
+
+        // Menambahkan event listener untuk setiap elemen dropdown
+        dropdowns.forEach((dropdown) => {
+            // Mengambil elemen anak pertama sebagai toggle
+            const toggle = dropdown.children[0];
+
+            // Menambahkan event listener saat toggle di klik
+            toggle.addEventListener('click', () => {
+                // Toggle class "hidden" pada elemen dropdown
+                dropdown.children[1].classList.toggle('hidden');
+            });
+
+            // Menambahkan event listener saat mengklik di luar dropdown
+            document.addEventListener('click', (event) => {
+                // Mengecek apakah elemen yang diklik berada di dalam dropdown atau tidak
+                if (!dropdown.contains(event.target)) {
+                    // Menyembunyikan dropdown jika diklik di luar dropdown
+                    dropdown.children[1].classList.add('hidden');
+                }
+            });
+        });
+    </script>
+@endsection
