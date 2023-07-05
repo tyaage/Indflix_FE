@@ -3,6 +3,9 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\GenreController;
+use App\Http\Controllers\MovieController;
+use App\Http\Controllers\DashboardController;
 
 /*
 |--------------------------------------------------------------------------
@@ -27,15 +30,19 @@ Route::controller(AuthController::class)->group(function () {
     Route::get('/register', 'indexRegister');
     Route::post('/register', 'register');
 
-    Route::get('/akun', 'pengaturan');
-    Route::post('/ubah-password', 'ubahPassword');
-    Route::post('/ubah-profile', 'ubahProfile');
+    Route::middleware('loggedin')->group(function () {
+        Route::get('/akun', 'pengaturan');
+        Route::post('/ubah-password', 'ubahPassword');
+        Route::post('/ubah-profile', 'ubahProfile');
+    });
 });
 
+Route::prefix('admin')->middleware(['loggedin', 'admin'])->group(function () {
+    Route::get('/', [DashboardController::class, 'index'])->name('admin.dashboard');
 
-Route::get('/lupasandi', function () {
-    return view('login.lupasandi');
+    Route::resource('/movie', MovieController::class);
+    Route::resource('/genre', GenreController::class);
 });
-Route::get('/lengkapiprofil', function () {
-    return view('register.lengkapiprofil');
-});
+
+Route::get('/{movie}', [MovieController::class, 'show'])->middleware('loggedin');
+Route::post('/{slug}/like', [MovieController::class, 'like']);

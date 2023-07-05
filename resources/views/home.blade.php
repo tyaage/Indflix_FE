@@ -32,10 +32,8 @@
         <div class="flex flex-wrap justify-center gap-10">
             @foreach ($popularMovies as $movie)
                 <div class="w-64 h-74">
-                    <a href="/{{ $movie['slug'] }}">
-                        <img src="{{ url('http://localhost:8000' . $movie['image']) }}" alt="Movie"
-                            class="rounded-md shadow-sm w-full h-full">
-                    </a>
+                    <a href="/{{ $movie->slug }}"><img src="{{ asset($movie->image) }}" alt="Movie"
+                            class="rounded-md shadow-sm w-full h-full"></a>
                 </div>
             @endforeach
         </div>
@@ -48,14 +46,10 @@
         <div class="flex flex-wrap justify-center gap-10">
             @foreach ($newestMovies as $movie)
                 <div class="w-64 h-74">
-                    <a href="/{{ $movie['slug'] }}">
-                        <img src="{{ url('http://localhost:8000' . $movie['image']) }}" alt="Movie"
-                            class="rounded-md shadow-sm w-full h-full">
-                    </a>
+                    <a href="/{{ $movie->slug }}"><img src="{{ asset($movie->image) }}" alt="Movie"
+                            class="rounded-md shadow-sm w-full h-full"></a>
                 </div>
             @endforeach
         </div>
     </div>
-@endsection
-@section('js')
 @endsection
