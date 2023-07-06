@@ -33,7 +33,7 @@ class AuthController extends Controller
                 return redirect('/')->with('success', $responseData['message']);
             }
         } else {
-            // Error
+            // Error.
             $errorResponse = $response->json();
             return redirect()->back()->with('error', $errorResponse['message'])->withInput($errorResponse['oldInput']);
         }

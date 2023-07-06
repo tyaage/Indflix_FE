@@ -1,14 +1,14 @@
 @extends('layouts.main')
 
 @section('container')
-    <div class="container mx-auto p-4">
-        <h1 class="text-2xl font-bold mb-20">Genre List</h1>
-        <div class="flex justify-between mb-4">
-            <a href="{{ route('admin.dashboard') }}" class="mr-2">
-                <button class="px-4 py-2 text-white bg-blue-500 rounded hover:bg-blue-600">Kembali</button>
+    <div class="w-full mx-auto max-w-screen-xl p-5 bg-gray-100 shadow-sm">
+        <h1 class="text-2xl font-bold mb-10 pt-48 lg:pt-32">Genre List</h1>
+        <div class="flex mb-4 gap-3">
+            <a href="{{ route('admin.dashboard') }}">
+                <button class="px-4 py-2 text-white bg-cstmdark rounded-md hover:bg-cstmlightdark font-semibold">Kembali</button>
             </a>
             <a href="{{ route('genre.create') }}">
-                <button class="px-4 py-2 text-white bg-green-500 rounded hover:bg-green-600">Create Genre</button>
+                <button class="px-4 py-2 text-white bg-green-500 rounded-md hover:bg-green-600 font-semibold">Create Genre</button>
             </a>
         </div>
 
@@ -23,9 +23,9 @@
         <table class="w-full border-collapse">
             <thead>
                 <tr>
-                    <th class="bg-gray-200 border border-gray-300 py-2 px-4">No.</th>
-                    <th class="bg-gray-200 border border-gray-300 py-2 px-4">Name</th>
-                    <th class="bg-gray-200 border border-gray-300 py-2 px-4">Action</th>
+                    <th class="bg-gray-200 border border-gray-300 py-2 px-4 text-left">No.</th>
+                    <th class="bg-gray-200 border border-gray-300 py-2 px-4 text-left">Name</th>
+                    <th class="bg-gray-200 border border-gray-300 py-2 px-4 text-left">Action</th>
                 </tr>
             </thead>
             <tbody>
