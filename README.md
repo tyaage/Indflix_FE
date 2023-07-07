@@ -11,9 +11,11 @@
 1. ```git clone```
 2. ```composer update```
 3. ```npm install -D tailwindcss```
-4. ```php artisan key:generate```
-5. ```npm run dev```
-6. ```php artisan ser --port=7000```
+4. ```cp .env.example .env```
+5. ```php artisan key:generate```
+6. ```php artisan storage:link```
+7. ```npm run dev```
+8. ```php artisan ser --port=7000```
 
 ## About Laravel
 
