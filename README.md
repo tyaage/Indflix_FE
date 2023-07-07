@@ -7,6 +7,14 @@
 <a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
 </p>
 
+## Installation
+1. ```git clone```
+2. ```composer update```
+3. ```npm install -D tailwindcss```
+4. ```php artisan key:generate```
+5. ```npm run dev```
+6. ```php artisan ser --port=7000```
+
 ## About Laravel
 
 Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
